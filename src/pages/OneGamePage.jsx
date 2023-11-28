@@ -24,27 +24,26 @@ export const OneGamePage = () => {
     }, [id])
 
     const handleDelete = () => {
-        if (
+        {
             window.confirm(
                 "¿Estás seguro que deseas eliminar este juego? Esta acción no se puede deshacer"
-            )
-        ) {
-            fetch(`http://localhost:3000/api/games/`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-
-                body: JSON.stringify({ id: id }),
-            })
-                .then((response) => response.json())
-                .then(() => {
-                    console.log("El juego ha sido eliminado correctamente")
-                    setShouldRedirect(true)
+            ) &&
+                fetch(`http://localhost:3000/api/games/`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // Pasamos el ID del juego en el cuerpo de la solicitud
+                    body: JSON.stringify({ id }),
                 })
-                .catch((error) => {
-                    console.error("Error:", error)
-                })
+                    .then((response) => response.json())
+                    .then(() => {
+                        console.log("El juego ha sido eliminado correctamente")
+                        setShouldRedirect(true)
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error)
+                    })
         }
     }
 

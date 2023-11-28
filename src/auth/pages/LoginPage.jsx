@@ -11,7 +11,9 @@ export const LoginPage = () => {
     } = useForm({
         criteriaMode: "all",
     })
-    const [setCookie] = useCookies(["token"])
+
+    // eslint-disable-next-line no-unused-vars
+    const [cookies, setCookie] = useCookies(["token"])
 
     const [autenticating] = useState(false)
 
@@ -19,26 +21,24 @@ export const LoginPage = () => {
 
     const onSubmit = (data, e) => {
         e.preventDefault()
-        try {
-            fetch("http://localhost:3000/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
+
+        fetch("http://localhost:3000/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            // Convertimos la respuesta a JSON
+            .then((response) => response.json())
+            .then((data) => {
+                setCookie("token", data.token)
+
+                navigate("/")
             })
-                // Convertimos la respuesta a JSON
-                .then((response) => response.json())
-                .then((data) => {
-                    setCookie("token", data.token)
-
-                    navigate("/")
-
-                    console.log(data)
-                })
-        } catch {
-            console.log("Hubo un ERRRORRRRR")
-        }
+            .catch((error) => {
+                console.log("Hubo un error", error)
+            })
     }
 
     return (
