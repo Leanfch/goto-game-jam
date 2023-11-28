@@ -1,0 +1,7 @@
+export * from "./AddNewGame"
+export * from "./GamesPage"
+export * from "./HomePage"
+export * from "./JudgesPage"
+export * from "./OneGamePage"
+export * from "./OneJudgePage"
+export * from "./UpdateGamePage"
