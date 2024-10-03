@@ -15,7 +15,7 @@ export const FooterComponent = () => {
             </div>
             <div className="footer-info">
                 <p className="text-center">
-                    &copy; 2023 Goto Game Jam. All rights reserved | Leandro
+                    &copy; 2024 Goto Game Jam. All rights reserved | Leandro
                     Fernandez - DW4NBV
                 </p>
             </div>

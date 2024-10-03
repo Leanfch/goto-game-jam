@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { useCookies } from "react-cookie"
+import LoaderSpinner from "../../components/LoaderSpinner"
 
 export const LoginPage = () => {
     const {
@@ -15,13 +16,15 @@ export const LoginPage = () => {
     // eslint-disable-next-line no-unused-vars
     const [cookies, setCookie] = useCookies(["token"])
 
-    const [autenticating] = useState(false)
+    const [autenticating, setAutenticating] = useState(false)
+
+    const [error, setError] = useState(null)
 
     const navigate = useNavigate()
 
     const onSubmit = (data, e) => {
-        e.preventDefault()
-
+        e.preventDefault();
+        setAutenticating(true);
         fetch("http://localhost:3000/api/auth/login", {
             method: "POST",
             headers: {
@@ -29,29 +32,46 @@ export const LoginPage = () => {
             },
             body: JSON.stringify(data),
         })
-            // Convertimos la respuesta a JSON
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('La contraseña o el email son incorrectos');
+                }
+                return response.json();
+            })
             .then((data) => {
-                setCookie("token", data.token)
-                navigate("/")
+                if (data.error) {
+                    setError(data.message);
+                    setAutenticating(false);
+                    return;
+                }
+                if (!data.token) {
+                    setError('Invalid login response');
+                    setAutenticating(false);
+                    return;
+                }
+                setCookie("token", data.token);
+                navigate("/dashboard");
             })
             .catch((error) => {
-                console.log("Hubo un error", error)
-            })
-    }
+                setError(error.message);
+                setAutenticating(false);
+            });
+    };
 
     return (
         <>
             <div className="bg-slate-700 relative flex flex-col justify-center min-h-[75vh] overflow-hidden">
                 <div className="bg-stone-100 w-full p-6 m-auto rounded-md shadow-xl lg:max-w-xl">
                     <h1 className="text-3xl font-semibold text-center text-purple-700 uppercase">
-                        Iniciar Sesion
+                        Iniciar Sesión
+                    {autenticating && <LoaderSpinner />}
                     </h1>
                     <form
                         action=""
                         className="mt-6"
                         onSubmit={handleSubmit(onSubmit)}
                     >
+                        {error && <span className="text-red-700">{error}</span>}
                         <div className="mb-2">
                             <label
                                 htmlFor="email"

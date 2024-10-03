@@ -47,9 +47,6 @@ export const NavBar = () => {
                         Inicio
                     </NavLink>
                 </li>
-                <CookiesProvider>
-                    {cookies.token ? (
-                        <>
                             <li>
                                 <NavLink
                                     className="hover:bg-green-700 hover:text-black transition-all hover:p-3 rounded-md"
@@ -58,6 +55,9 @@ export const NavBar = () => {
                                     Juegos
                                 </NavLink>
                             </li>
+                <CookiesProvider>
+                    {cookies.token ? (
+                        <>
                             <li>
                                 <NavLink
                                     className="hover:bg-green-700 hover:text-black transition-all hover:p-3 rounded-md"
@@ -85,7 +85,7 @@ export const NavBar = () => {
                                 </div>
 
                                 {isOpenProfile && (
-                                    <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div className="z-10 cursor-pointer origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                         <div
                                             className="py-1"
                                             role="menu"
@@ -102,8 +102,8 @@ export const NavBar = () => {
                                                                 "include",
                                                         }
                                                     ).then(() => {
-                                                        window.location.href =
-                                                            "/auth/login"
+                                                        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                                        window.location.href ="/auth/login"
                                                     })
                                                 }}
                                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
