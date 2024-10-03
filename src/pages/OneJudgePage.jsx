@@ -4,53 +4,41 @@ import { MainTitle } from "../components"
 
 // ESTE COMPONENTE MUESTRA UN JUEZ
 export const OneJudgePage = () => {
-    const { id, name } = useParams()
+    const { name, judgeId } = useParams()
 
-    const [games, setGames] = useState([])
+    // const [games, setGames] = useState([])
     const [votes, setVotes] = useState([])
-
     useEffect(() => {
         const fetchVote = async () => {
             const responseJudgeVotes = await fetch(
-                `http://localhost:3000/api/judges/judge/${id}`
+                `http://localhost:3000/api/judges/judge/${judgeId}`
             )
             const dataJudgeVotes = await responseJudgeVotes.json()
+            setVotes(dataJudgeVotes)
 
-            const gamePromises = dataJudgeVotes.map(async (vote) => {
-                if (vote.game) {
-                    const responseGame = await fetch(
-                        `http://localhost:3000/api/games/${vote.game}`
-                    )
-                    return responseGame.json()
-                }
-            })
+            // const gamesFetch = await Promise.all(gamePromises)
+            // setGames(gamesFetch)
 
-            const gamesFetch = await Promise.all(gamePromises)
-            setGames(gamesFetch)
+            // const votesPromises = dataJudgeVotes.map(async (vote) => {
+            //     if (vote.game) {
+            //         const responseVote =
+            //             (vote.artPoints +
+            //                 vote.gameplayPoints +
+            //                 vote.soundPoints +
+            //                 vote.themePoints) /
+            //             4
 
-            const votesPromises = dataJudgeVotes.map(async (vote) => {
-                if (vote.game) {
-                    const responseVote =
-                        (vote.artPoints +
-                            vote.gameplayPoints +
-                            vote.soundPoints +
-                            vote.themePoints) /
-                        4
+            //         const idGameVote = vote.game
 
-                    const idGameVote = vote.game
-
-                    return { totalVotes: responseVote, gameId: idGameVote }
-                }
-            })
-
-            const votesFetch = await Promise.all(votesPromises)
-            setVotes(votesFetch)
+            //         return { totalVotes: responseVote, gameId: idGameVote }
+            //     }
+            // })
         }
 
         fetchVote()
-    }, [id])
+    }, [judgeId])
 
-    if (!games) {
+    if (!judgeId) {
         return <span className="text-3xl">Estoy cargando...</span>
     }
 
@@ -58,17 +46,22 @@ export const OneJudgePage = () => {
         <>
             <MainTitle title={`Voto del Juez ${name}`} />
             <div className="flex">
-                {games.map((game) => {
-                    const vote = votes.find((v) => v.gameId === game._id)
+                {votes.map((vote) => {
+                    let totalVotes =
+                        (vote.artPoints +
+                            vote.gameplayPoints +
+                            vote.soundPoints +
+                            vote.themePoints) /
+                        4
                     return (
                         <div
-                            key={game._id}
+                            key={vote._id}
                             className="text-center w-[50%] mx-auto"
                         >
                             <p className="text-3xl font-bold mb-2">
-                                {game.name}
+                                {vote.game.name}
                             </p>
-                            <p>Promedio Voto :{vote.totalVotes} </p>
+                            <p>Promedio Voto :{totalVotes} </p>
                         </div>
                     )
                 })}

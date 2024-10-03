@@ -28,7 +28,7 @@ export const VotingRoutes = () => {
                         <Route path="/games/:id" element={<OneGamePage />} />
                         <Route path="/judges" element={<JudgesPage />} />
                         <Route
-                            path="/judges/judge/:id/:name"
+                            path="/judges/:judgeId/:name"
                             element={<OneJudgePage />}
                         />
 

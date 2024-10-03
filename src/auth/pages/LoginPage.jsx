@@ -33,7 +33,6 @@ export const LoginPage = () => {
             .then((response) => response.json())
             .then((data) => {
                 setCookie("token", data.token)
-
                 navigate("/")
             })
             .catch((error) => {
