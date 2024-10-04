@@ -2,11 +2,11 @@ import { MainTitle } from "../components"
 
 export const HomePage = () => {
     return (
-        <>
-            <MainTitle title="GOTO Game JAM" />
+        <main className="max-w-7xl flex flex-col mx-auto">
+            <MainTitle title="Game Jam ON" />
             <p className="m-5 text-center text-xl">
-                Bienvenidos a GOTO Game JAM - Donde la Creatividad se Convierte
-                en Juego Descubre el emocionante mundo de GOTO Game JAM, la
+                Bienvenidos a Game Jam ON - Donde la creatividad se convierte
+                en juego descubre el emocionante mundo de Game Jam ON, la
                 competencia anual que desafía a equipos de talentosos
                 desarrolladores a crear asombrosos videojuegos en tan solo 48
                 horas. Nuestro escenario es el crisol de la innovación, donde la
@@ -19,9 +19,9 @@ export const HomePage = () => {
                 desarrollo de videojuegos se encuentra con la intensidad de la
                 competencia! Únete a nosotros en esta emocionante jornada donde
                 la creatividad y la destreza se fusionan para dar vida a los
-                juegos del mañana. ¡GOTO Game JAM, donde cada línea de código
+                juegos del mañana. ¡Game Jam ON, donde cada línea de código
                 cuenta y cada idea se convierte en diversión interactiva!
             </p>
-        </>
+        </main>
     )
 }

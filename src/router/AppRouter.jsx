@@ -5,12 +5,10 @@ import { AuthRoutes } from "../auth/routes/AuthRoutes"
 export const AppRouter = () => {
     return (
         <>
-            <div>
-                <Routes>
-                    <Route path="/*" element={<VotingRoutes />} />
-                    <Route path="/auth/*" element={<AuthRoutes />} />
-                </Routes>
-            </div>
+        <Routes>
+            <Route path="/*" element={<VotingRoutes />} />
+            <Route path="/auth/*" element={<AuthRoutes />} />
+        </Routes>
         </>
     )
 }

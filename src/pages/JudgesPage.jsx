@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react"
 import { MainTitle } from "../components"
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
+import { useCookies } from "react-cookie"
+
 // ESTE COMPONENTE MUESTRA UNA LISTA DE JUECES
 export const JudgesPage = () => {
     const [judges, setJudges] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [cookies] = useCookies(["token"])
 
     useEffect(() => {
-        const fetchGames = async () => {
+        const fetchJudges = async () => {
             const response = await fetch("http://localhost:3000/api/judges")
             const data = await response.json()
 
@@ -15,8 +18,12 @@ export const JudgesPage = () => {
             setIsLoading(false)
         }
 
-        fetchGames()
+        fetchJudges()
     }, [])
+
+    if (!cookies.token) {
+        return <Navigate to="/" />
+    }
 
     return (
         <>

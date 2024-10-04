@@ -1,40 +1,37 @@
 import { useState, useEffect } from "react"
 import { MainTitle } from "../components"
-import { Link, Navigate } from "react-router-dom"
-import { CookiesProvider, useCookies } from "react-cookie"
+import { Link } from "react-router-dom"
+import LoaderSpinner from "../components/LoaderSpinner"
 
 // ESTE COMPONENTE MUESTRA UNA LISTA DE JUEGOS
 export const GamesPage = () => {
     const [games, setGames] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [cookies] = useCookies(["token"])
 
     useEffect(() => {
         const fetchGames = async () => {
-            const response = await fetch("http://localhost:3000/api/games")
-            const data = await response.json()
-
-            setGames(data)
+            try {
+                const response = await fetch("http://localhost:3000/api/games")
+                if (!response.ok) {
+                    throw new Error("Algo salió mal")
+                }
+                const data = await response.json()
+                setGames(data)
+            } catch (error) {
+                console.error("Failed to fetch games -" + error);
+            }
             setIsLoading(false)
         }
 
         fetchGames()
-    }, [games])
-
-    // Si el usuario no está logeado, lo redirigimos a la home
-    if (!cookies.token) {
-        return <Navigate to="/" />
-    }
+    }, [])
 
     return (
         <>
-            <CookiesProvider>
                 <>
                     <MainTitle title="Juegos" />
                     <div className="flex flex-col items-center">
-                        {isLoading && (
-                            <span className="text-3xl">Estoy cargando...</span>
-                        )}
+                        {isLoading && <LoaderSpinner />}
                         <ul className="mx-auto max-w-md divide-y divide-gray-200 dark:divide-gray-700 m-16">
                             {games.map((game) => (
                                 <li
@@ -71,7 +68,6 @@ export const GamesPage = () => {
                         </div>
                     </div>
                 </>
-            </CookiesProvider>
         </>
     )
 }

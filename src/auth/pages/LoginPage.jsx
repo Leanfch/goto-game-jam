@@ -59,9 +59,8 @@ export const LoginPage = () => {
     };
 
     return (
-        <>
-            <div className="bg-slate-700 relative flex flex-col justify-center min-h-[75vh] overflow-hidden">
-                <div className="bg-stone-100 w-full p-6 m-auto rounded-md shadow-xl lg:max-w-xl">
+        <main className="flex items-center justify-center flex-grow">
+                <div className="bg-stone-200 w-full p-6 m-auto rounded-md shadow-xl md:max-w-xl">
                     <h1 className="text-3xl font-semibold text-center text-purple-700 uppercase">
                         Iniciar Sesión
                     {autenticating && <LoaderSpinner />}
@@ -137,7 +136,6 @@ export const LoginPage = () => {
                         </div>
                     </form>
                 </div>
-            </div>
-        </>
+        </main>
     )
 }
