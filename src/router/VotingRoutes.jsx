@@ -15,7 +15,6 @@ export const VotingRoutes = () => {
     return (
         <>
             <NavBar />
-            <div className="flex-grow">
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/games" element={<GamesPage />} />
@@ -34,7 +33,6 @@ export const VotingRoutes = () => {
                     <Route path="/auth/login" element={<LoginPage />} />
                     <Route path="/*" element={<Navigate to="/" />} />
                 </Routes>
-            </div>
             <FooterComponent />
         </>
     )
