@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams, Navigate, Link } from "react-router-dom"
+import Swal from "sweetalert2"
 
 // ESTE COMPONENTE MUESTRA UN JUEGO
 export const OneGamePage = () => {
@@ -39,27 +40,53 @@ export const OneGamePage = () => {
         fetchUserProfile()
     }, [id])
 
-    const handleDelete = () => {
-        {
-            window.confirm(
-                "¿Estás seguro que deseas eliminar este juego? Esta acción no se puede deshacer"
-            ) &&
-                fetch(`http://localhost:3000/api/games/`, {
+    const handleDelete = async () => {
+        // Mostrar confirmación con SweetAlert
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción no se puede deshacer",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        })
+
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/games/`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    // Pasamos el ID del juego en el cuerpo de la solicitud
+                    credentials: 'include',
                     body: JSON.stringify({ id }),
                 })
-                    .then((response) => response.json())
-                    .then(() => {
-                        console.log("El juego ha sido eliminado correctamente")
-                        setShouldRedirect(true)
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error)
-                    })
+
+                if (!response.ok) {
+                    const error = await response.json()
+                    throw new Error(error.message || 'Error al eliminar el juego')
+                }
+
+                await Swal.fire({
+                    title: '¡Eliminado!',
+                    text: 'El juego ha sido eliminado correctamente',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                })
+
+                setShouldRedirect(true)
+            } catch (error) {
+                console.error("Error:", error)
+                Swal.fire({
+                    title: 'Error',
+                    text: error.message || 'No se pudo eliminar el juego',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+            }
         }
     }
 
@@ -67,7 +94,7 @@ export const OneGamePage = () => {
         return <Navigate to="/games" />
     }
 
-    const { name, genre, edition } = game
+    const { name, genre, edition, totalPoints } = game
 
     return (
         <>
@@ -81,10 +108,16 @@ export const OneGamePage = () => {
                         {genre}
                     </span>
                 </p>
-                <p className="text-xl my-10">
+                <p className="text-xl mb-2">
                     Edición:{" "}
                     <span className="bg-yellow-300 text-black p-1 font-medium">
                         {edition}
+                    </span>
+                </p>
+                <p className="text-xl my-10">
+                    Puntuación Total:{" "}
+                    <span className="bg-blue-500 text-white px-4 py-2 rounded-full font-bold text-2xl">
+                        {totalPoints || 0}
                     </span>
                 </p>
                 {/* Botón de Votar - Solo para jueces */}

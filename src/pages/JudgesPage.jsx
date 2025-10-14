@@ -43,31 +43,25 @@ export const JudgesPage = () => {
                         </span>
                     )}
                     {judges.map((judge) => (
-                        <div
+                        <Link
                             key={judge._id}
-                            className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-4 hover:shadow-lg"
+                            to={`/judges/${judge._id}/${judge.name}`}
+                            className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-4 hover:shadow-xl transition-shadow cursor-pointer"
                         >
-                            <Link
-                                to={`/judges/${judge._id}/${judge.name}`}
-                                className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-                            >
-                                <img
-                                    className="rounded-t-lg"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBjZn8mOw7F4rtWWKbEIIHOr_w_GAeHiXPgA&usqp=CAU"
-                                    alt="No image user"
-                                />
-                            </Link>
-                            <div>
-                                <Link
-                                    to={`/judges/judge/${judge._id}`}
-                                    className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-                                >
-                                    <p className="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                                        {judge.name}
-                                    </p>
-                                </Link>
+                            <img
+                                className="rounded-t-lg"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBjZn8mOw7F4rtWWKbEIIHOr_w_GAeHiXPgA&usqp=CAU"
+                                alt="No image user"
+                            />
+                            <div className="p-4">
+                                <p className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+                                    {judge.name}
+                                </p>
+                                <p className="text-sm text-center text-gray-500 mt-2">
+                                    {judge.email}
+                                </p>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>

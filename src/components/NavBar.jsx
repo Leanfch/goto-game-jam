@@ -16,7 +16,7 @@ export const NavBar = () => {
         setIsOpenProfile(false)
     }
 
-    const [cookies] = useCookies(["token"])
+    const [cookies, setCookie, removeCookie] = useCookies(["token"])
 
     // Obtener el rol del usuario
     useEffect(() => {
@@ -30,7 +30,11 @@ export const NavBar = () => {
                 })
                 .catch((error) => {
                     console.error("Error fetching user profile:", error)
+                    setUserRole(null)
                 })
+        } else {
+            // Si no hay token, limpiar el rol
+            setUserRole(null)
         }
     }, [cookies.token])
 
@@ -123,20 +127,38 @@ export const NavBar = () => {
                                                 aria-labelledby="options-menu"
                                             >
                                                 <div
-                                                    onClick={() => {
-                                                        fetch(
-                                                            "http://localhost:3000/api/auth/logout",
-                                                            {
-                                                                method: "POST",
-                                                                credentials:
-                                                                    "include",
-                                                            }
-                                                        ).then(() => {
-                                                            document.cookie =
-                                                                "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-                                                            window.location.href =
-                                                                "/auth/login"
-                                                        })
+                                                    onClick={async () => {
+                                                        try {
+                                                            // Cerrar el dropdown primero
+                                                            closeDropdownProfile()
+
+                                                            await fetch(
+                                                                "http://localhost:3000/api/auth/logout",
+                                                                {
+                                                                    method: "POST",
+                                                                    credentials: "include",
+                                                                }
+                                                            )
+
+                                                            // Remover cookie usando react-cookie
+                                                            removeCookie("token", { path: "/" })
+
+                                                            // Limpiar el rol del usuario inmediatamente
+                                                            setUserRole(null)
+
+                                                            // Pequeño delay para asegurar que el estado se actualice
+                                                            setTimeout(() => {
+                                                                window.location.href = "/"
+                                                            }, 100)
+                                                        } catch (error) {
+                                                            console.error("Error al cerrar sesión:", error)
+                                                            // Aún así intentar limpiar la cookie y redirigir
+                                                            removeCookie("token", { path: "/" })
+                                                            setUserRole(null)
+                                                            setTimeout(() => {
+                                                                window.location.href = "/"
+                                                            }, 100)
+                                                        }
                                                     }}
                                                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                                                     role="menuitem"
