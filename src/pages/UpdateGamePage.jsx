@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { MainTitle } from "../components"
 import { useParams, Navigate } from "react-router-dom"
+import { showSuccessAlert, showErrorAlert } from "../utils/sweetAlertHelper"
 
 // ESTE COMPONENTE PERMITE ACTUALIZAR UN JUEGO
 export const UpdateGamePage = () => {
@@ -45,15 +46,16 @@ export const UpdateGamePage = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-
+            credentials: 'include', // IMPORTANTE: Enviar cookies con JWT
             body: JSON.stringify(gameData),
         })
 
         if (response.ok) {
-            console.log("Juego actualizado correctamente")
-            setShouldRedirect(true)
+            showSuccessAlert('¡Éxito!', 'Juego actualizado correctamente').then(() => {
+                setShouldRedirect(true)
+            })
         } else {
-            console.error("Error al actualizar el juego")
+            showErrorAlert('Error', 'No se pudo actualizar el juego')
         }
     }
     if (shouldRedirect) {

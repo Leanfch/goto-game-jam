@@ -4,6 +4,7 @@ import { NavLink, Link } from "react-router-dom"
 
 export const NavBar = () => {
     const [isOpenProfile, setIsOpenProfile] = useState(false)
+    const [userRole, setUserRole] = useState(null)
 
     const dropdownRef = useRef(null)
 
@@ -16,6 +17,22 @@ export const NavBar = () => {
     }
 
     const [cookies] = useCookies(["token"])
+
+    // Obtener el rol del usuario
+    useEffect(() => {
+        if (cookies.token) {
+            fetch("http://localhost:3000/api/auth/profile", {
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setUserRole(data.role)
+                })
+                .catch((error) => {
+                    console.error("Error fetching user profile:", error)
+                })
+        }
+    }, [cookies.token])
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -67,6 +84,18 @@ export const NavBar = () => {
                                         Jueces
                                     </NavLink>
                                 </li>
+
+                                {/* Mostrar "Agregar Juez" solo para admins */}
+                                {userRole === 'admin' && (
+                                    <li>
+                                        <NavLink
+                                            className="hover:bg-green-700 hover:text-black transition-all hover:p-3 rounded-md"
+                                            to="/admin/create-user"
+                                        >
+                                            Agregar Juez
+                                        </NavLink>
+                                    </li>
+                                )}
 
                                 <div
                                     className="relative inline-block text-left"

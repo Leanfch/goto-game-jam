@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { useCookies } from "react-cookie"
 import LoaderSpinner from "../../components/LoaderSpinner"
+import { showSuccessAlert, showErrorAlert } from "../../utils/sweetAlertHelper"
 
 export const LoginPage = () => {
     const {
@@ -30,6 +31,7 @@ export const LoginPage = () => {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify(data),
         })
             .then((response) => {
@@ -40,20 +42,22 @@ export const LoginPage = () => {
             })
             .then((data) => {
                 if (data.error) {
-                    setError(data.message);
+                    showErrorAlert('Error', data.message);
                     setAutenticating(false);
                     return;
                 }
                 if (!data.token) {
-                    setError('Invalid login response');
+                    showErrorAlert('Error', 'Respuesta de inicio de sesión inválida');
                     setAutenticating(false);
                     return;
                 }
                 setCookie("token", data.token);
-                navigate("/dashboard");
+                showSuccessAlert('¡Éxito!', 'Has iniciado sesión correctamente').then(() => {
+                    navigate("/dashboard");
+                });
             })
             .catch((error) => {
-                setError(error.message);
+                showErrorAlert('Error de inicio de sesión', error.message);
                 setAutenticating(false);
             });
     };
@@ -125,16 +129,35 @@ export const LoginPage = () => {
                             )}{" "}
                         </div>
 
+                        <div className="mt-2 text-right">
+                            <a
+                                href="/auth/forgot-password"
+                                className="text-xs text-purple-600 hover:underline"
+                            >
+                                ¿Olvidaste tu contraseña?
+                            </a>
+                        </div>
+
                         <div className="mt-6">
                             <button
                                 disabled={autenticating}
                                 type="submit"
-                                className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600"
+                                className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600 disabled:bg-purple-400"
                             >
                                 Iniciar sesión
                             </button>
                         </div>
                     </form>
+
+                    <p className="mt-8 text-xs font-light text-center text-gray-700">
+                        ¿No tienes una cuenta?{" "}
+                        <a
+                            href="/auth/register"
+                            className="font-medium text-purple-600 hover:underline"
+                        >
+                            Regístrate aquí
+                        </a>
+                    </p>
                 </div>
         </main>
     )

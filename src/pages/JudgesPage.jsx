@@ -11,11 +11,18 @@ export const JudgesPage = () => {
 
     useEffect(() => {
         const fetchJudges = async () => {
-            const response = await fetch("http://localhost:3000/api/judges")
-            const data = await response.json()
+            try {
+                // Cambiar al nuevo endpoint que obtiene usuarios con rol de juez
+                const response = await fetch("http://localhost:3000/api/auth/users/judges")
+                const data = await response.json()
 
-            setJudges(data)
-            setIsLoading(false)
+                console.log('Judges data:', data)
+                setJudges(data)
+                setIsLoading(false)
+            } catch (error) {
+                console.error('Error fetching judges:', error)
+                setIsLoading(false)
+            }
         }
 
         fetchJudges()

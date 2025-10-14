@@ -8,6 +8,7 @@ export const OneGamePage = () => {
     const [game, setGame] = useState({})
     const [isLoading, setIsLoading] = useState(true)
     const [shouldRedirect, setShouldRedirect] = useState(false)
+    const [userRole, setUserRole] = useState(null)
 
     useEffect(() => {
         const fetchGames = async () => {
@@ -20,7 +21,22 @@ export const OneGamePage = () => {
             setIsLoading(false)
         }
 
+        const fetchUserProfile = async () => {
+            try {
+                const response = await fetch("http://localhost:3000/api/auth/profile", {
+                    credentials: "include",
+                })
+                if (response.ok) {
+                    const data = await response.json()
+                    setUserRole(data.role)
+                }
+            } catch (error) {
+                console.error("Error fetching user profile:", error)
+            }
+        }
+
         fetchGames()
+        fetchUserProfile()
     }, [id])
 
     const handleDelete = () => {
@@ -71,19 +87,34 @@ export const OneGamePage = () => {
                         {edition}
                     </span>
                 </p>
-                <Link
-                    to={`/games/update/${id}`}
-                    className="text-black hover:text-white bg-cyan-400 hover:bg-cyan-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-all"
-                >
-                    Modificar
-                </Link>
+                {/* Botón de Votar - Solo para jueces */}
+                {userRole === 'juez' && (
+                    <Link
+                        to={`/games/${id}/vote`}
+                        className="text-white bg-purple-700 hover:bg-purple-600 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 transition-all"
+                    >
+                        Votar
+                    </Link>
+                )}
 
-                <button
-                    className="text-white hover:text-black bg-red-700 hover:bg-red-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-all"
-                    onClick={handleDelete}
-                >
-                    Eliminar
-                </button>
+                {/* Botones de Modificar y Eliminar - Solo para usuarios */}
+                {userRole === 'usuario' && (
+                    <>
+                        <Link
+                            to={`/games/update/${id}`}
+                            className="text-black hover:text-white bg-cyan-400 hover:bg-cyan-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-all"
+                        >
+                            Modificar
+                        </Link>
+
+                        <button
+                            className="text-white hover:text-black bg-red-700 hover:bg-red-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-all"
+                            onClick={handleDelete}
+                        >
+                            Eliminar
+                        </button>
+                    </>
+                )}
             </div>
         </>
     )

@@ -2,6 +2,7 @@ import { useState } from "react"
 import { MainTitle } from "../components"
 import { Navigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
+import { showSuccessAlert, showErrorAlert } from "../utils/sweetAlertHelper"
 
 // Este componente permite al usuario agregar un nuevo juego
 export const AddNewGame = () => {
@@ -23,16 +24,24 @@ export const AddNewGame = () => {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: 'include', // IMPORTANTE: Enviar cookies con JWT
             body: JSON.stringify(game),
         })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.message || 'Error al agregar el juego')
+                    })
+                }
+                return response.json()
+            })
             .then(() => {
-                console.log("Juego agregado con éxito")
-
-                setShouldRedirect(true)
+                showSuccessAlert('¡Éxito!', 'Juego agregado correctamente').then(() => {
+                    setShouldRedirect(true)
+                })
             })
             .catch((error) => {
-                console.error("Error:", error)
+                showErrorAlert('Error', 'No se pudo agregar el juego: ' + error.message)
             })
     }
 
