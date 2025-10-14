@@ -63,29 +63,42 @@ export const LoginPage = () => {
     };
 
     return (
-        <main className="flex items-center justify-center flex-grow">
-                <div className="bg-stone-200 w-full p-6 m-auto rounded-md shadow-xl md:max-w-xl">
-                    <h1 className="text-3xl font-semibold text-center text-purple-700 uppercase">
-                        Iniciar Sesión
-                    {autenticating && <LoaderSpinner />}
-                    </h1>
-                    <form
-                        action=""
-                        className="mt-6"
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        {error && <span className="text-red-700">{error}</span>}
-                        <div className="mb-2">
+        <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 px-4 py-8 sm:px-6 lg:px-8">
+            <div className="w-full max-w-md">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 border border-gray-100">
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                            Iniciar Sesión
+                        </h1>
+                        <p className="text-sm sm:text-base text-gray-600">
+                            Ingresa a tu cuenta de Game Jam ON
+                        </p>
+                    </div>
+
+                    {autenticating && (
+                        <div className="mb-6">
+                            <LoaderSpinner />
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                        {error && (
+                            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                                {error}
+                            </div>
+                        )}
+
+                        <div>
                             <label
                                 htmlFor="email"
-                                className="block text-sm font-semibold text-gray-800"
+                                className="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Email
                             </label>
                             <input
                                 type="email"
                                 id="email"
-                                placeholder="Email"
+                                placeholder="ejemplo@correo.com"
                                 {...register("email", {
                                     required: "Este campo es requerido",
                                     pattern: {
@@ -93,72 +106,73 @@ export const LoginPage = () => {
                                         message: "Ingrese un email válido",
                                     },
                                 })}
-                                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:bg-white transition-all outline-none"
                             />
                             {errors.email && (
-                                <span className="text-red-700">
+                                <p className="text-red-600 text-sm mt-1.5">
                                     {errors.email.message}
-                                </span>
+                                </p>
                             )}
                         </div>
-                        <div className="mb-2">
+
+                        <div>
                             <label
                                 htmlFor="password"
-                                className="block text-sm font-semibold text-gray-800"
+                                className="block text-sm font-semibold text-gray-700 mb-2"
                             >
                                 Contraseña
                             </label>
                             <input
                                 type="password"
                                 id="password"
-                                placeholder="Contraseña"
+                                placeholder="••••••••"
                                 {...register("password", {
                                     required: "Este campo es requerido",
                                     minLength: {
                                         value: 6,
-                                        message:
-                                            "La contaseña debe tener al menos 6 caracteres",
+                                        message: "La contraseña debe tener al menos 6 caracteres",
                                     },
                                 })}
-                                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:bg-white transition-all outline-none"
                             />
                             {errors.password && (
-                                <span className="text-red-700">
+                                <p className="text-red-600 text-sm mt-1.5">
                                     {errors.password.message}
-                                </span>
-                            )}{" "}
+                                </p>
+                            )}
                         </div>
 
-                        <div className="mt-2 text-right">
+                        <div className="text-right">
                             <a
                                 href="/auth/forgot-password"
-                                className="text-xs text-purple-600 hover:underline"
+                                className="text-sm font-medium text-purple-600 hover:text-purple-700 hover:underline transition-colors"
                             >
                                 ¿Olvidaste tu contraseña?
                             </a>
                         </div>
 
-                        <div className="mt-6">
-                            <button
-                                disabled={autenticating}
-                                type="submit"
-                                className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600 disabled:bg-purple-400"
-                            >
-                                Iniciar sesión
-                            </button>
-                        </div>
+                        <button
+                            disabled={autenticating}
+                            type="submit"
+                            className="w-full py-3.5 px-4 text-base font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-purple-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+                        >
+                            {autenticating ? "Iniciando sesión..." : "Iniciar sesión"}
+                        </button>
                     </form>
 
-                    <p className="mt-8 text-xs font-light text-center text-gray-700">
-                        ¿No tienes una cuenta?{" "}
-                        <a
-                            href="/auth/register"
-                            className="font-medium text-purple-600 hover:underline"
-                        >
-                            Regístrate aquí
-                        </a>
-                    </p>
+                    <div className="mt-8 text-center">
+                        <p className="text-sm text-gray-600">
+                            ¿No tienes una cuenta?{" "}
+                            <a
+                                href="/auth/register"
+                                className="font-semibold text-purple-600 hover:text-purple-700 hover:underline transition-colors"
+                            >
+                                Regístrate aquí
+                            </a>
+                        </p>
+                    </div>
                 </div>
+            </div>
         </main>
     )
 }

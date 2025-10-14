@@ -4,9 +4,11 @@ import { NavLink, Link } from "react-router-dom"
 
 export const NavBar = () => {
     const [isOpenProfile, setIsOpenProfile] = useState(false)
+    const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false)
     const [userRole, setUserRole] = useState(null)
 
     const dropdownRef = useRef(null)
+    const mobileMenuRef = useRef(null)
 
     const toggleDropdownProfile = () => {
         setIsOpenProfile(!isOpenProfile)
@@ -14,6 +16,14 @@ export const NavBar = () => {
 
     const closeDropdownProfile = () => {
         setIsOpenProfile(false)
+    }
+
+    const toggleMobileMenu = () => {
+        setIsOpenMobileMenu(!isOpenMobileMenu)
+    }
+
+    const closeMobileMenu = () => {
+        setIsOpenMobileMenu(false)
     }
 
     const [cookies, setCookie, removeCookie] = useCookies(["token"])
@@ -46,6 +56,13 @@ export const NavBar = () => {
             ) {
                 closeDropdownProfile()
             }
+            if (
+                mobileMenuRef.current &&
+                !mobileMenuRef.current.contains(event.target) &&
+                !event.target.closest('.mobile-menu-button')
+            ) {
+                closeMobileMenu()
+            }
         }
 
         document.addEventListener("mousedown", handleClickOutside)
@@ -54,131 +71,230 @@ export const NavBar = () => {
             document.removeEventListener("mousedown", handleClickOutside)
         }
     }, [])
+    const handleLogout = async () => {
+        try {
+            closeDropdownProfile()
+            await fetch("http://localhost:3000/api/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            })
+            removeCookie("token", { path: "/" })
+            setUserRole(null)
+            setTimeout(() => {
+                window.location.href = "/"
+            }, 100)
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error)
+            removeCookie("token", { path: "/" })
+            setUserRole(null)
+            setTimeout(() => {
+                window.location.href = "/"
+            }, 100)
+        }
+    }
+
     return (
-        <nav className="bg-black">
-            <div className="flex mx-auto justify-between px-10 py-3 font-bold text-white max-w-7xl">
-                <div className="font-bold">
-                    <img src="/gamejam.jpeg" alt="logo" className="w-20" />
-                </div>
-                <ul className="flex items-center space-x-10 text-xl">
-                    <li>
+        <nav className="bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 shadow-xl sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16 md:h-20">
+                    {/* Logo */}
+                    <Link to="/" className="flex-shrink-0 transition-transform hover:scale-105">
+                        <img src="/gamejam.jpeg" alt="Game Jam ON" className="h-12 md:h-16 w-auto rounded-lg shadow-md" />
+                    </Link>
+
+                    {/* Desktop Menu */}
+                    <div className="hidden lg:flex items-center">
                         <NavLink
-                            className="hover:bg-green-700 hover:text-black transition-all hover:p-3 rounded-md"
                             to="/"
+                            className={({ isActive }) =>
+                                `px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                    isActive
+                                        ? "bg-purple-600 text-white shadow-lg"
+                                        : "text-gray-200 hover:bg-purple-700/50 hover:text-white"
+                                }`
+                            }
                         >
                             Inicio
                         </NavLink>
-                    </li>
-                    <li>
                         <NavLink
-                            className="hover:bg-green-700 hover:text-black transition-all hover:p-3 rounded-md"
                             to="/games"
+                            className={({ isActive }) =>
+                                `px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                    isActive
+                                        ? "bg-purple-600 text-white shadow-lg"
+                                        : "text-gray-200 hover:bg-purple-700/50 hover:text-white"
+                                }`
+                            }
                         >
                             Juegos
                         </NavLink>
-                    </li>
-                    <CookiesProvider>
-                        {cookies.token ? (
-                            <>
-                                <li>
+
+                        <CookiesProvider>
+                            {cookies.token ? (
+                                <>
                                     <NavLink
-                                        className="hover:bg-green-700 hover:text-black transition-all hover:p-3 rounded-md"
                                         to="/judges"
+                                        className={({ isActive }) =>
+                                            `px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                                isActive
+                                                    ? "bg-purple-600 text-white shadow-lg"
+                                                    : "text-gray-200 hover:bg-purple-700/50 hover:text-white"
+                                            }`
+                                        }
                                     >
                                         Jueces
                                     </NavLink>
-                                </li>
 
-                                {/* Mostrar "Agregar Juez" solo para admins */}
-                                {userRole === 'admin' && (
-                                    <li>
+                                    {userRole === 'admin' && (
                                         <NavLink
-                                            className="hover:bg-green-700 hover:text-black transition-all hover:p-3 rounded-md"
                                             to="/admin/create-user"
+                                            className={({ isActive }) =>
+                                                `px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                                    isActive
+                                                        ? "bg-purple-600 text-white shadow-lg"
+                                                        : "text-gray-200 hover:bg-purple-700/50 hover:text-white"
+                                                }`
+                                            }
                                         >
                                             Agregar Juez
                                         </NavLink>
-                                    </li>
-                                )}
+                                    )}
 
-                                <div
-                                    className="relative inline-block text-left"
-                                    ref={dropdownRef}
-                                >
-                                    <div>
+                                    <div className="relative ml-6" ref={dropdownRef}>
                                         <button
                                             onClick={toggleDropdownProfile}
-                                            className=" flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300"
+                                            className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 border-2 border-white shadow-lg hover:shadow-xl transition-all hover:scale-110"
                                         >
-                                            <img
-                                                className="w-8 h-8 rounded-full"
-                                                src="/default-avatar.png"
-                                                alt="Avatar"
-                                            />
+                                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </svg>
                                         </button>
-                                    </div>
 
-                                    {isOpenProfile && (
-                                        <div className="z-10 cursor-pointer origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                            <div
-                                                className="py-1"
-                                                role="menu"
-                                                aria-orientation="vertical"
-                                                aria-labelledby="options-menu"
-                                            >
-                                                <div
-                                                    onClick={async () => {
-                                                        try {
-                                                            // Cerrar el dropdown primero
-                                                            closeDropdownProfile()
-
-                                                            await fetch(
-                                                                "http://localhost:3000/api/auth/logout",
-                                                                {
-                                                                    method: "POST",
-                                                                    credentials: "include",
-                                                                }
-                                                            )
-
-                                                            // Remover cookie usando react-cookie
-                                                            removeCookie("token", { path: "/" })
-
-                                                            // Limpiar el rol del usuario inmediatamente
-                                                            setUserRole(null)
-
-                                                            // Pequeño delay para asegurar que el estado se actualice
-                                                            setTimeout(() => {
-                                                                window.location.href = "/"
-                                                            }, 100)
-                                                        } catch (error) {
-                                                            console.error("Error al cerrar sesión:", error)
-                                                            // Aún así intentar limpiar la cookie y redirigir
-                                                            removeCookie("token", { path: "/" })
-                                                            setUserRole(null)
-                                                            setTimeout(() => {
-                                                                window.location.href = "/"
-                                                            }, 100)
-                                                        }
-                                                    }}
-                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                                    role="menuitem"
+                                        {isOpenProfile && (
+                                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden">
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center gap-2"
                                                 >
-                                                    Salir
-                                                </div>
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                                    </svg>
+                                                    Cerrar Sesión
+                                                </button>
                                             </div>
-                                        </div>
+                                        )}
+                                    </div>
+                                </>
+                            ) : (
+                                <Link to="/auth/login">
+                                    <button className="ml-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105">
+                                        Ingresar
+                                    </button>
+                                </Link>
+                            )}
+                        </CookiesProvider>
+                    </div>
+
+                    {/* Mobile menu button */}
+                    <div className="lg:hidden">
+                        <button
+                            onClick={toggleMobileMenu}
+                            className="mobile-menu-button inline-flex items-center justify-center p-2 rounded-lg text-gray-200 hover:bg-purple-700/50 focus:outline-none transition-colors"
+                        >
+                            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {isOpenMobileMenu ? (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                ) : (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                                )}
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Mobile Menu */}
+                {isOpenMobileMenu && (
+                    <div ref={mobileMenuRef} className="lg:hidden pb-4 space-y-2">
+                        <NavLink
+                            to="/"
+                            onClick={closeMobileMenu}
+                            className={({ isActive }) =>
+                                `block px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                    isActive
+                                        ? "bg-purple-600 text-white"
+                                        : "text-gray-200 hover:bg-purple-700/50"
+                                }`
+                            }
+                        >
+                            Inicio
+                        </NavLink>
+                        <NavLink
+                            to="/games"
+                            onClick={closeMobileMenu}
+                            className={({ isActive }) =>
+                                `block px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                    isActive
+                                        ? "bg-purple-600 text-white"
+                                        : "text-gray-200 hover:bg-purple-700/50"
+                                }`
+                            }
+                        >
+                            Juegos
+                        </NavLink>
+
+                        <CookiesProvider>
+                            {cookies.token ? (
+                                <>
+                                    <NavLink
+                                        to="/judges"
+                                        onClick={closeMobileMenu}
+                                        className={({ isActive }) =>
+                                            `block px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                                isActive
+                                                    ? "bg-purple-600 text-white"
+                                                    : "text-gray-200 hover:bg-purple-700/50"
+                                            }`
+                                        }
+                                    >
+                                        Jueces
+                                    </NavLink>
+
+                                    {userRole === 'admin' && (
+                                        <NavLink
+                                            to="/admin/create-user"
+                                            onClick={closeMobileMenu}
+                                            className={({ isActive }) =>
+                                                `block px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                                    isActive
+                                                        ? "bg-purple-600 text-white"
+                                                        : "text-gray-200 hover:bg-purple-700/50"
+                                                }`
+                                            }
+                                        >
+                                            Agregar Juez
+                                        </NavLink>
                                     )}
-                                </div>
-                            </>
-                        ) : (
-                            <Link to="/auth/login">
-                                <button className="mt-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-                                    Ingresar
-                                </button>
-                            </Link>
-                        )}
-                    </CookiesProvider>
-                </ul>
+
+                                    <button
+                                        onClick={() => {
+                                            closeMobileMenu()
+                                            handleLogout()
+                                        }}
+                                        className="w-full text-left px-4 py-2 text-sm font-semibold text-red-300 hover:bg-red-900/30 rounded-lg transition-colors"
+                                    >
+                                        Cerrar Sesión
+                                    </button>
+                                </>
+                            ) : (
+                                <Link to="/auth/login" onClick={closeMobileMenu}>
+                                    <button className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all">
+                                        Ingresar
+                                    </button>
+                                </Link>
+                            )}
+                        </CookiesProvider>
+                    </div>
+                )}
             </div>
         </nav>
     )

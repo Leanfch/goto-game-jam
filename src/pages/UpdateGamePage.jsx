@@ -63,54 +63,82 @@ export const UpdateGamePage = () => {
     }
 
     return (
-        <div className="flex justify-center items-center max-h-screen">
-            <div>
+        <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-12">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <MainTitle title="Modificar juego" />
-                <form
-                    onSubmit={handleSubmit}
-                    className="flex flex-col space-y-4 mx-auto"
-                >
-                    <label className="flex flex-col text-xl">
-                        Título:
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={gameData.name}
-                            onChange={handleChange}
-                            className="px-2 py-1 border border-gray-300 rounded"
-                        />
-                    </label>
-                    <label className="flex flex-col text-xl">
-                        Género:
-                        <input
-                            type="text"
-                            id="genre"
-                            name="genre"
-                            value={gameData.genre}
-                            onChange={handleChange}
-                            className="px-2 py-1 border border-gray-300 rounded"
-                        />
-                    </label>
-                    <label className="flex flex-col text-xl">
-                        Edición:
-                        <input
-                            type="text"
-                            id="edition"
-                            name="edition"
-                            value={gameData.edition}
-                            onChange={handleChange}
-                            className="px-2 py-1 border border-gray-300 rounded"
-                        />
-                    </label>
-                    <button
-                        type="submit"
-                        className="text-white hover:py-5 hover:px-7 hover:text-black bg-emerald-700 hover:bg-emerald-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-all"
-                    >
-                        Actualizar
-                    </button>
-                </form>
+
+                <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100">
+                    <div className="text-center mb-8">
+                        <div className="inline-block p-4 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-2xl mb-6">
+                            <svg className="w-16 h-16 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                            Actualizar Información
+                        </h2>
+                        <p className="text-gray-600">
+                            Modifica los detalles del juego
+                        </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                                Nombre del Juego
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={gameData.name}
+                                onChange={handleChange}
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:bg-white transition-all outline-none"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="genre" className="block text-sm font-semibold text-gray-700 mb-2">
+                                Género
+                            </label>
+                            <input
+                                type="text"
+                                id="genre"
+                                name="genre"
+                                value={gameData.genre}
+                                onChange={handleChange}
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:bg-white transition-all outline-none"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="edition" className="block text-sm font-semibold text-gray-700 mb-2">
+                                Edición (Año)
+                            </label>
+                            <input
+                                type="text"
+                                id="edition"
+                                name="edition"
+                                value={gameData.edition}
+                                onChange={handleChange}
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:bg-white transition-all outline-none"
+                            />
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                            <button
+                                type="submit"
+                                className="flex-1 py-4 px-6 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg hover:from-cyan-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 text-lg"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Actualizar Juego
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        </main>
     )
 }

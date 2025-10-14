@@ -47,81 +47,87 @@ export const ForgotPasswordPage = () => {
     }
 
     return (
-        <main className="flex items-center justify-center flex-grow">
-            <div className="bg-stone-200 w-full p-6 m-auto rounded-md shadow-xl md:max-w-xl">
-                <h1 className="text-3xl font-semibold text-center text-purple-700 uppercase">
-                    Recuperar Contraseña
-                    {sending && <LoaderSpinner />}
-                </h1>
-                <p className="text-center text-sm text-gray-600 mt-2">
-                    Ingresa tu email para recibir instrucciones de recuperación
-                </p>
-                <form
-                    action=""
-                    className="mt-6"
-                    onSubmit={handleSubmit(onSubmit)}
-                >
-                    <div className="mb-2">
-                        <label
-                            htmlFor="email"
-                            className="block text-sm font-semibold text-gray-800"
-                        >
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="Email"
-                            {...register("email", {
-                                required: "Este campo es requerido",
-                                pattern: {
-                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                    message: "Ingrese un email válido",
-                                },
-                            })}
-                            className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                        />
-                        {errors.email && (
-                            <span className="text-red-700">
-                                {errors.email.message}
-                            </span>
-                        )}
+        <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 px-4 py-8 sm:px-6 lg:px-8">
+            <div className="w-full max-w-md">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 border border-gray-100">
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                            Recuperar Contraseña
+                        </h1>
+                        <p className="text-sm sm:text-base text-gray-600">
+                            Ingresa tu email para recibir instrucciones de recuperación
+                        </p>
                     </div>
 
-                    <div className="mt-6">
+                    {sending && (
+                        <div className="mb-6">
+                            <LoaderSpinner />
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                        <div>
+                            <label
+                                htmlFor="email"
+                                className="block text-sm font-semibold text-gray-700 mb-2"
+                            >
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="ejemplo@correo.com"
+                                {...register("email", {
+                                    required: "Este campo es requerido",
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: "Ingrese un email válido",
+                                    },
+                                })}
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:bg-white transition-all outline-none"
+                            />
+                            {errors.email && (
+                                <p className="text-red-600 text-sm mt-1.5">
+                                    {errors.email.message}
+                                </p>
+                            )}
+                        </div>
+
                         <button
                             disabled={sending}
                             type="submit"
-                            className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600 disabled:bg-purple-400"
+                            className="w-full py-3.5 px-4 text-base font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-purple-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
                         >
-                            Enviar solicitud
+                            {sending ? "Enviando..." : "Enviar solicitud"}
                         </button>
-                    </div>
-                </form>
+                    </form>
 
-                {resetUrl && (
-                    <div className="mt-4 p-4 bg-green-100 rounded-md">
-                        <p className="text-sm text-green-800 font-semibold mb-2">
-                            Link de recuperación generado:
+                    {resetUrl && (
+                        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <p className="text-sm text-green-800 font-semibold mb-2">
+                                Link de recuperación generado:
+                            </p>
+                            <a
+                                href={resetUrl}
+                                className="text-sm text-blue-600 hover:text-blue-700 hover:underline break-all"
+                            >
+                                {resetUrl}
+                            </a>
+                        </div>
+                    )}
+
+                    <div className="mt-8 text-center">
+                        <p className="text-sm text-gray-600">
+                            ¿Recordaste tu contraseña?{" "}
+                            <a
+                                href="/auth/login"
+                                className="font-semibold text-purple-600 hover:text-purple-700 hover:underline transition-colors"
+                            >
+                                Inicia sesión aquí
+                            </a>
                         </p>
-                        <a
-                            href={resetUrl}
-                            className="text-sm text-blue-600 hover:underline break-all"
-                        >
-                            {resetUrl}
-                        </a>
                     </div>
-                )}
-
-                <p className="mt-8 text-xs font-light text-center text-gray-700">
-                    ¿Recordaste tu contraseña?{" "}
-                    <a
-                        href="/auth/login"
-                        className="font-medium text-purple-600 hover:underline"
-                    >
-                        Inicia sesión aquí
-                    </a>
-                </p>
+                </div>
             </div>
         </main>
     )

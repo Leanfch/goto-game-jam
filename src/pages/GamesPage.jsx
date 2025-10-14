@@ -68,94 +68,118 @@ export const GamesPage = () => {
     }, [selectedEdition, sortByScore, allGames])
 
     return (
-        <>
-                <>
-                    <MainTitle title="Juegos" />
-                    <div className="flex flex-col items-center">
-                        {isLoading && <LoaderSpinner />}
+        <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <MainTitle title="Juegos" />
 
-                        {/* Controles de filtro y ordenamiento */}
-                        <div className="w-full max-w-4xl mb-6 flex gap-4 justify-center items-center flex-wrap px-4">
-                            <div className="flex items-center gap-2">
-                                <label htmlFor="edition-filter" className="font-semibold text-gray-700">
-                                    Filtrar por Edición:
-                                </label>
-                                <select
-                                    id="edition-filter"
-                                    value={selectedEdition}
-                                    onChange={(e) => setSelectedEdition(e.target.value)}
-                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <option value="all">Todas las ediciones</option>
-                                    {editions.map((edition) => (
-                                        <option key={edition} value={edition}>
-                                            Edición {edition}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                {isLoading && (
+                    <div className="flex justify-center">
+                        <LoaderSpinner />
+                    </div>
+                )}
 
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    id="sort-by-score"
-                                    checked={sortByScore}
-                                    onChange={(e) => setSortByScore(e.target.checked)}
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                />
-                                <label htmlFor="sort-by-score" className="font-semibold text-gray-700">
-                                    Ordenar por puntuación
-                                </label>
-                            </div>
+                {/* Controles de filtro y ordenamiento */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
+                    <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+                        <div className="w-full md:w-auto">
+                            <label htmlFor="edition-filter" className="block text-sm font-semibold text-gray-700 mb-2">
+                                Filtrar por Edición
+                            </label>
+                            <select
+                                id="edition-filter"
+                                value={selectedEdition}
+                                onChange={(e) => setSelectedEdition(e.target.value)}
+                                className="w-full md:w-auto px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                            >
+                                <option value="all">Todas las ediciones</option>
+                                {editions.map((edition) => (
+                                    <option key={edition} value={edition}>
+                                        Edición {edition}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
-                        <ul className="mx-auto max-w-md divide-y divide-gray-200 dark:divide-gray-700 m-16">
-                            {games.length === 0 && !isLoading && (
-                                <p className="text-center text-gray-500 mt-8">
-                                    No se encontraron juegos para esta edición.
-                                </p>
-                            )}
-                            {games.map((game) => (
-                                <li
-                                    className="pb-3 sm:pb-4"
-                                    key={game._id}
-                                    id={game._id}
-                                >
-                                    <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-xl font-medium text-gray-900 truncate dark:text-white">
-                                                {game.name}
-                                            </p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                Edición {game.edition} - Puntuación: {game.totalPoints || 0}
-                                            </p>
-                                        </div>
-                                        <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                            <Link
-                                                to={`/games/${game._id}`}
-                                                type="button"
-                                                className="text-white bg-rose-600 hover:bg-cyan-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-all"
-                                            >
-                                                Ir al Juego
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                        {/* Botón de Agregar nuevo juego - Solo para usuarios */}
-                        {userRole === 'usuario' && (
-                            <div>
+                        <div className="flex items-center gap-2 pt-6">
+                            <input
+                                type="checkbox"
+                                id="sort-by-score"
+                                checked={sortByScore}
+                                onChange={(e) => setSortByScore(e.target.checked)}
+                                className="w-5 h-5 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 cursor-pointer"
+                            />
+                            <label htmlFor="sort-by-score" className="font-semibold text-gray-700 cursor-pointer">
+                                Ordenar por puntuación
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                {games.length === 0 && !isLoading && (
+                    <div className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-100">
+                        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <p className="text-xl text-gray-600">
+                            No se encontraron juegos para esta edición
+                        </p>
+                    </div>
+                )}
+
+                {/* Lista de juegos */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    {games.map((game) => (
+                        <div
+                            key={game._id}
+                            className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-[1.02] border border-gray-100 overflow-hidden"
+                        >
+                            <div className="p-6">
+                                <div className="flex items-start justify-between mb-4">
+                                    <h3 className="text-xl font-bold text-gray-900 flex-1 pr-2">
+                                        {game.name}
+                                    </h3>
+                                    <span className="bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-bold px-3 py-1 rounded-full">
+                                        {game.totalPoints || 0}
+                                    </span>
+                                </div>
+
+                                <div className="space-y-2 mb-4">
+                                    <p className="text-sm text-gray-600">
+                                        <span className="font-semibold">Edición:</span> {game.edition}
+                                    </p>
+                                    <p className="text-sm text-gray-600">
+                                        <span className="font-semibold">Género:</span> {game.genre || 'No especificado'}
+                                    </p>
+                                </div>
+
                                 <Link
-                                    to={"/games/new/"}
-                                    className="text-white hover:py-5 hover:px-7 hover:text-black bg-emerald-700 hover:bg-emerald-400 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 transition-all"
+                                    to={`/games/${game._id}`}
+                                    className="block w-full text-center px-4 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-md"
                                 >
-                                    Agregar nuevo juego
+                                    Ver Detalles
                                 </Link>
                             </div>
-                        )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Botón de Agregar nuevo juego - Solo para usuarios */}
+                {userRole === 'usuario' && (
+                    <div className="flex justify-center">
+                        <Link
+                            to="/games/new/"
+                            className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg shadow-lg hover:from-green-700 hover:to-emerald-700 transition-all transform hover:scale-105 flex items-center gap-2"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Agregar Nuevo Juego
+                        </Link>
                     </div>
-                </>
-        </>
+                )}
+            </div>
+        </main>
     )
 }

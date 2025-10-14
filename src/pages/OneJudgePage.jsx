@@ -55,13 +55,21 @@ export const OneJudgePage = () => {
     }
 
     return (
-        <>
-            <MainTitle title={`Votos del Juez ${name}`} />
-            <div className="container mx-auto px-4 py-8">
+        <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <MainTitle title={`Votos del Juez ${name}`} />
+
                 {votes.length === 0 ? (
-                    <p className="text-center text-gray-500 text-xl">
-                        Este juez aún no ha votado por ningún juego.
-                    </p>
+                    <div className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-100">
+                        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <p className="text-xl text-gray-600">
+                            Este juez aún no ha votado por ningún juego
+                        </p>
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {votes.map((vote) => {
@@ -75,33 +83,49 @@ export const OneJudgePage = () => {
                             return (
                                 <div
                                     key={vote._id}
-                                    className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
+                                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-100 overflow-hidden"
                                 >
-                                    <h3 className="text-2xl font-bold mb-4 text-gray-800">
-                                        {vote.gameId?.name || 'Juego no encontrado'}
-                                    </h3>
-                                    <div className="space-y-2 mb-4">
-                                        <p className="text-gray-700">
-                                            <span className="font-semibold">Jugabilidad:</span> {vote.gameplayPoints}/10
-                                        </p>
-                                        <p className="text-gray-700">
-                                            <span className="font-semibold">Arte:</span> {vote.artPoints}/10
-                                        </p>
-                                        <p className="text-gray-700">
-                                            <span className="font-semibold">Sonido:</span> {vote.soundPoints}/10
-                                        </p>
-                                        <p className="text-gray-700">
-                                            <span className="font-semibold">Temática:</span> {vote.themePoints}/10
-                                        </p>
+                                    <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-6 text-white">
+                                        <h3 className="text-xl font-bold text-center">
+                                            {vote.gameId?.name || 'Juego no encontrado'}
+                                        </h3>
                                     </div>
-                                    <div className="border-t pt-4">
-                                        <p className="text-xl font-bold text-center">
-                                            <span className="text-gray-600">Total:</span>{" "}
-                                            <span className="text-blue-600">{totalPoints}/40</span>
-                                        </p>
-                                        <p className="text-lg text-center text-gray-600">
-                                            Promedio: {averagePoints}/10
-                                        </p>
+
+                                    <div className="p-6 space-y-3">
+                                        <div className="flex justify-between items-center pb-2 border-b border-gray-100">
+                                            <span className="text-gray-700 font-semibold">Jugabilidad</span>
+                                            <span className="bg-purple-100 text-purple-700 font-bold px-3 py-1 rounded-full text-sm">
+                                                {vote.gameplayPoints}/10
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center pb-2 border-b border-gray-100">
+                                            <span className="text-gray-700 font-semibold">Arte</span>
+                                            <span className="bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full text-sm">
+                                                {vote.artPoints}/10
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center pb-2 border-b border-gray-100">
+                                            <span className="text-gray-700 font-semibold">Sonido</span>
+                                            <span className="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-full text-sm">
+                                                {vote.soundPoints}/10
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center pb-2 border-b border-gray-100">
+                                            <span className="text-gray-700 font-semibold">Temática</span>
+                                            <span className="bg-yellow-100 text-yellow-700 font-bold px-3 py-1 rounded-full text-sm">
+                                                {vote.themePoints}/10
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-6 border-t border-gray-100">
+                                        <div className="text-center">
+                                            <p className="text-sm text-gray-600 mb-1">Total</p>
+                                            <p className="text-3xl font-bold text-purple-600">{totalPoints}/40</p>
+                                            <p className="text-sm text-gray-600 mt-2">
+                                                Promedio: <span className="font-semibold text-gray-900">{averagePoints}/10</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             )
@@ -109,6 +133,6 @@ export const OneJudgePage = () => {
                     </div>
                 )}
             </div>
-        </>
+        </main>
     )
 }
