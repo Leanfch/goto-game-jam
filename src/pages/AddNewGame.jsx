@@ -17,7 +17,11 @@ export const AddNewGame = () => {
     const onHandleSubmit = (data, e) => {
         e.preventDefault()
 
-        const game = data
+        // Convertir members de string a array
+        const game = {
+            ...data,
+            members: data.members ? data.members.split(',').map(m => m.trim()).filter(m => m !== '') : []
+        }
 
         fetch("http://localhost:3000/api/games", {
             method: "POST",
@@ -160,6 +164,52 @@ export const AddNewGame = () => {
                                     {errors.edition.message}
                                 </p>
                             )}
+                        </div>
+
+                        <div>
+                            <label htmlFor="photo" className="block text-sm font-semibold text-gray-700 mb-2">
+                                URL de la Foto del Juego
+                            </label>
+                            <input
+                                type="text"
+                                id="photo"
+                                placeholder="Ej: https://ejemplo.com/imagen.jpg"
+                                {...register("photo", {
+                                    required: false,
+                                    pattern: {
+                                        value: /^https?:\/\/.+/,
+                                        message: "Debe ser una URL válida (http:// o https://)",
+                                    },
+                                })}
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:bg-white transition-all outline-none"
+                            />
+                            {errors.photo && (
+                                <p className="text-red-600 text-sm mt-1.5">
+                                    {errors.photo.message}
+                                </p>
+                            )}
+                            <p className="text-gray-500 text-xs mt-1">Opcional: URL de la imagen del juego</p>
+                        </div>
+
+                        <div>
+                            <label htmlFor="members" className="block text-sm font-semibold text-gray-700 mb-2">
+                                Miembros del Equipo
+                            </label>
+                            <textarea
+                                id="members"
+                                rows="3"
+                                placeholder="Ej: Juan Pérez, María García, Carlos López"
+                                {...register("members", {
+                                    required: false,
+                                })}
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:bg-white transition-all outline-none resize-none"
+                            />
+                            {errors.members && (
+                                <p className="text-red-600 text-sm mt-1.5">
+                                    {errors.members.message}
+                                </p>
+                            )}
+                            <p className="text-gray-500 text-xs mt-1">Opcional: Separar nombres con comas</p>
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">

@@ -12,6 +12,8 @@ export const UpdateGamePage = () => {
         name: "",
         genre: "",
         edition: "",
+        photo: "",
+        members: "",
     })
 
     useEffect(() => {
@@ -26,6 +28,8 @@ export const UpdateGamePage = () => {
                 name: data.name,
                 genre: data.genre,
                 edition: data.edition,
+                photo: data.photo || "",
+                members: Array.isArray(data.members) ? data.members.join(', ') : "",
             })
         }
 
@@ -41,13 +45,19 @@ export const UpdateGamePage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        // Convertir members de string a array antes de enviar
+        const dataToSend = {
+            ...gameData,
+            members: gameData.members ? gameData.members.split(',').map(m => m.trim()).filter(m => m !== '') : []
+        }
+
         const response = await fetch(`http://localhost:3000/api/games`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
             credentials: 'include', // IMPORTANTE: Enviar cookies con JWT
-            body: JSON.stringify(gameData),
+            body: JSON.stringify(dataToSend),
         })
 
         if (response.ok) {
@@ -123,6 +133,38 @@ export const UpdateGamePage = () => {
                                 onChange={handleChange}
                                 className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:bg-white transition-all outline-none"
                             />
+                        </div>
+
+                        <div>
+                            <label htmlFor="photo" className="block text-sm font-semibold text-gray-700 mb-2">
+                                URL de la Foto del Juego
+                            </label>
+                            <input
+                                type="text"
+                                id="photo"
+                                name="photo"
+                                value={gameData.photo}
+                                onChange={handleChange}
+                                placeholder="Ej: https://ejemplo.com/imagen.jpg"
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:bg-white transition-all outline-none"
+                            />
+                            <p className="text-gray-500 text-xs mt-1">Opcional: URL de la imagen del juego</p>
+                        </div>
+
+                        <div>
+                            <label htmlFor="members" className="block text-sm font-semibold text-gray-700 mb-2">
+                                Miembros del Equipo
+                            </label>
+                            <textarea
+                                id="members"
+                                name="members"
+                                rows="3"
+                                value={gameData.members}
+                                onChange={handleChange}
+                                placeholder="Ej: Juan Pérez, María García, Carlos López"
+                                className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:bg-white transition-all outline-none resize-none"
+                            />
+                            <p className="text-gray-500 text-xs mt-1">Opcional: Separar nombres con comas</p>
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">

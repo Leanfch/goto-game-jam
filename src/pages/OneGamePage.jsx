@@ -94,7 +94,7 @@ export const OneGamePage = () => {
         return <Navigate to="/games" />
     }
 
-    const { name, genre, edition, totalPoints } = game
+    const { name, genre, edition, totalPoints, photo, members } = game
 
     if (isLoading) {
         return (
@@ -110,11 +110,30 @@ export const OneGamePage = () => {
                 <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100">
                     {/* Header con icono */}
                     <div className="text-center mb-8">
-                        <div className="inline-block p-4 bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl mb-6">
-                            <svg className="w-16 h-16 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
-                            </svg>
-                        </div>
+                        {photo ? (
+                            <div className="mb-6">
+                                <img
+                                    src={photo}
+                                    alt={name}
+                                    className="w-full max-w-2xl mx-auto rounded-2xl shadow-lg object-cover"
+                                    onError={(e) => {
+                                        e.target.style.display = 'none'
+                                        e.target.nextSibling.style.display = 'block'
+                                    }}
+                                />
+                                <div style={{display: 'none'}} className="inline-block p-4 bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl">
+                                    <svg className="w-16 h-16 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="inline-block p-4 bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl mb-6">
+                                <svg className="w-16 h-16 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                                </svg>
+                            </div>
+                        )}
                         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{name}</h1>
                     </div>
 
@@ -130,6 +149,28 @@ export const OneGamePage = () => {
                             <p className="text-2xl font-bold text-gray-900">{edition}</p>
                         </div>
                     </div>
+
+                    {/* Miembros del equipo */}
+                    {members && members.length > 0 && (
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100 mb-8">
+                            <p className="text-sm text-gray-600 mb-3 font-semibold flex items-center gap-2">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                Miembros del Equipo
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                {members.map((member, index) => (
+                                    <span
+                                        key={index}
+                                        className="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm font-medium shadow-sm border border-green-200"
+                                    >
+                                        {member}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Puntuación Total */}
                     <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white text-center mb-8">
