@@ -135,23 +135,63 @@ export const GamesPage = () => {
                             key={game._id}
                             className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-[1.02] border border-gray-100 overflow-hidden"
                         >
-                            <div className="p-6">
-                                <div className="flex items-start justify-between mb-4">
-                                    <h3 className="text-xl font-bold text-gray-900 flex-1 pr-2">
-                                        {game.name}
-                                    </h3>
-                                    <span className="bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-bold px-3 py-1 rounded-full">
-                                        {game.totalPoints || 0}
-                                    </span>
+                            {/* Imagen del juego */}
+                            {game.photo && (
+                                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100">
+                                    <img
+                                        src={game.photo}
+                                        alt={game.name}
+                                        className="w-full h-full object-contain"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = 'https://via.placeholder.com/400x300/9333ea/ffffff?text=Game+Jam+ON';
+                                        }}
+                                    />
+                                    {/* Badge de puntuación sobre la imagen */}
+                                    <div className="absolute top-3 right-3">
+                                        <span className="bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-bold px-3 py-1.5 rounded-full shadow-lg">
+                                            ⭐ {game.totalPoints || 0}
+                                        </span>
+                                    </div>
                                 </div>
+                            )}
+
+                            {/* Sin imagen - mostrar placeholder */}
+                            {!game.photo && (
+                                <div className="relative h-48 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                                    <div className="text-center">
+                                        <svg className="w-16 h-16 text-purple-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <p className="text-purple-400 text-sm font-medium">Sin imagen</p>
+                                    </div>
+                                    {/* Badge de puntuación */}
+                                    <div className="absolute top-3 right-3">
+                                        <span className="bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-bold px-3 py-1.5 rounded-full shadow-lg">
+                                            ⭐ {game.totalPoints || 0}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="p-6">
+                                <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                                    {game.name}
+                                </h3>
 
                                 <div className="space-y-2 mb-4">
-                                    <p className="text-sm text-gray-600">
+                                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                                        <svg className="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                                        </svg>
                                         <span className="font-semibold">Edición:</span> {game.edition}
-                                    </p>
-                                    <p className="text-sm text-gray-600">
+                                    </div>
+                                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                                        <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
+                                        </svg>
                                         <span className="font-semibold">Género:</span> {game.genre || 'No especificado'}
-                                    </p>
+                                    </div>
                                 </div>
 
                                 <Link
