@@ -52,7 +52,7 @@ export const CreateUserPage = () => {
     return (
         <main className="min-h-screen py-12">
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <MainTitle title="Agregar Nuevo Juez" />
+                <MainTitle title="Agregar nuevo juez" />
 
                 <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100">
                     <div className="text-center mb-8">

@@ -6,6 +6,7 @@ export const NavBar = () => {
     const [isOpenProfile, setIsOpenProfile] = useState(false)
     const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false)
     const [userRole, setUserRole] = useState(null)
+    const [userName, setUserName] = useState(null)
 
     const dropdownRef = useRef(null)
     const mobileMenuRef = useRef(null)
@@ -42,15 +43,18 @@ export const NavBar = () => {
                 })
                 .then((data) => {
                     setUserRole(data.role)
+                    setUserName(data.name)
                 })
                 .catch(() => {
                     // Si falla el fetch del perfil, eliminar la cookie inválida
                     setUserRole(null)
+                    setUserName(null)
                     removeCookie("token", { path: "/" })
                 })
         } else {
-            // Si no hay token, limpiar el rol
+            // Si no hay token, limpiar el rol y nombre
             setUserRole(null)
+            setUserName(null)
         }
     }, [cookies.token])
 
@@ -86,6 +90,7 @@ export const NavBar = () => {
             })
             removeCookie("token", { path: "/" })
             setUserRole(null)
+            setUserName(null)
             setTimeout(() => {
                 window.location.href = "/"
             }, 100)
@@ -93,6 +98,7 @@ export const NavBar = () => {
             console.error("Error al cerrar sesión:", error)
             removeCookie("token", { path: "/" })
             setUserRole(null)
+            setUserName(null)
             setTimeout(() => {
                 window.location.href = "/"
             }, 100)
@@ -168,15 +174,22 @@ export const NavBar = () => {
                                     <div className="relative ml-6" ref={dropdownRef}>
                                         <button
                                             onClick={toggleDropdownProfile}
-                                            className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 border-2 border-white shadow-lg hover:shadow-xl transition-all hover:scale-110"
+                                            className="flex items-center gap-2 px-3 py-2 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 border-2 border-white shadow-lg hover:shadow-xl transition-all hover:scale-105"
                                         >
-                                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                             </svg>
+                                            {userName && (
+                                                <span className="text-white font-semibold text-sm">{userName}</span>
+                                            )}
                                         </button>
 
                                         {isOpenProfile && (
-                                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden">
+                                            <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden">
+                                                <div className="px-4 py-3 bg-gradient-to-r from-purple-50 to-blue-50 border-b border-gray-200">
+                                                    <p className="text-sm font-semibold text-gray-800">{userName}</p>
+                                                    <p className="text-xs text-gray-600 capitalize">{userRole}</p>
+                                                </div>
                                                 <button
                                                     onClick={handleLogout}
                                                     className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center gap-2"
@@ -219,6 +232,15 @@ export const NavBar = () => {
                 {/* Mobile Menu */}
                 {isOpenMobileMenu && (
                     <div ref={mobileMenuRef} className="lg:hidden pb-4 space-y-2">
+                        {/* Información del usuario en la parte superior si está logeado */}
+                        {cookies.token && userName && (
+                            <div className="mx-4 mt-2 mb-3 px-4 py-3 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30">
+                                <p className="text-sm font-semibold text-white">{userName}</p>
+                                <p className="text-xs text-gray-300 capitalize">{userRole}</p>
+                            </div>
+                        )}
+
+                        {/* Enlaces de navegación */}
                         <NavLink
                             to="/"
                             onClick={closeMobileMenu}
@@ -278,19 +300,25 @@ export const NavBar = () => {
                                         </NavLink>
                                     )}
 
+                                    {/* Separador antes del botón de cerrar sesión */}
+                                    <div className="border-t border-purple-500/30 my-2"></div>
+
                                     <button
                                         onClick={() => {
                                             closeMobileMenu()
                                             handleLogout()
                                         }}
-                                        className="w-full text-left px-4 py-2 text-sm font-semibold text-red-300 hover:bg-red-900/30 rounded-lg transition-colors"
+                                        className="w-full text-left px-4 py-2 text-sm font-semibold text-red-300 hover:bg-red-900/30 rounded-lg transition-colors flex items-center gap-2"
                                     >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
                                         Cerrar Sesión
                                     </button>
                                 </>
                             ) : (
                                 <Link to="/auth/login" onClick={closeMobileMenu}>
-                                    <button className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all">
+                                    <button className="w-full mx-4 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all">
                                         Ingresar
                                     </button>
                                 </Link>

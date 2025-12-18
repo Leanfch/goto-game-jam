@@ -16,7 +16,6 @@ export const JudgesPage = () => {
                 const response = await fetch("http://localhost:3000/api/auth/users/judges")
                 const data = await response.json()
 
-                console.log('Judges data:', data)
                 setJudges(data)
                 setIsLoading(false)
             } catch (error) {

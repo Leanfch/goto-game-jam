@@ -51,9 +51,9 @@ export const RegisterPage = () => {
                     setRegistering(false);
                     return;
                 }
-                setCookie("token", data.token);
+                setCookie("token", data.token, { path: "/" });
                 showSuccessAlert('¡Registro exitoso!', 'Tu cuenta ha sido creada correctamente').then(() => {
-                    navigate("/dashboard");
+                    navigate("/");
                 });
             })
             .catch((error) => {

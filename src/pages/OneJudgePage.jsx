@@ -23,7 +23,6 @@ export const OneJudgePage = () => {
                 }
 
                 const dataJudgeVotes = await responseJudgeVotes.json()
-                console.log('Votes data:', dataJudgeVotes)
                 setVotes(dataJudgeVotes)
             } catch (err) {
                 console.error('Error fetching votes:', err)

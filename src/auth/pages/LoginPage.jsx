@@ -48,9 +48,9 @@ export const LoginPage = () => {
                     setAutenticating(false);
                     return;
                 }
-                setCookie("token", data.token);
+                setCookie("token", data.token, { path: "/" });
                 showSuccessAlert('¡Éxito!', 'Has iniciado sesión correctamente').then(() => {
-                    navigate("/dashboard");
+                    navigate("/");
                 });
             })
             .catch((error) => {
