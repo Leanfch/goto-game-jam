@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { CookiesProvider, useCookies } from "react-cookie"
+import { useCookies } from "react-cookie"
 import { NavLink, Link } from "react-router-dom"
 
 export const NavBar = () => {
@@ -34,13 +34,19 @@ export const NavBar = () => {
             fetch("http://localhost:3000/api/auth/profile", {
                 credentials: "include",
             })
-                .then((response) => response.json())
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Profile fetch failed")
+                    }
+                    return response.json()
+                })
                 .then((data) => {
                     setUserRole(data.role)
                 })
-                .catch((error) => {
-                    console.error("Error fetching user profile:", error)
+                .catch(() => {
+                    // Si falla el fetch del perfil, eliminar la cookie inválida
                     setUserRole(null)
+                    removeCookie("token", { path: "/" })
                 })
         } else {
             // Si no hay token, limpiar el rol
@@ -129,8 +135,7 @@ export const NavBar = () => {
                             Juegos
                         </NavLink>
 
-                        <CookiesProvider>
-                            {cookies.token ? (
+                        {cookies.token ? (
                                 <>
                                     <NavLink
                                         to="/judges"
@@ -192,7 +197,6 @@ export const NavBar = () => {
                                     </button>
                                 </Link>
                             )}
-                        </CookiesProvider>
                     </div>
 
                     {/* Mobile menu button */}
@@ -242,8 +246,7 @@ export const NavBar = () => {
                             Juegos
                         </NavLink>
 
-                        <CookiesProvider>
-                            {cookies.token ? (
+                        {cookies.token ? (
                                 <>
                                     <NavLink
                                         to="/judges"
@@ -292,7 +295,6 @@ export const NavBar = () => {
                                     </button>
                                 </Link>
                             )}
-                        </CookiesProvider>
                     </div>
                 )}
             </div>

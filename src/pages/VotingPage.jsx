@@ -143,6 +143,8 @@ export const VotingPage = () => {
                             </p>
                             <input
                                 type="number"
+                                min={1}
+                                max={10}
                                 {...register("gameplayPoints", {
                                     required: "Este campo es requerido",
                                     min: { value: 1, message: "El mínimo es 1" },
@@ -166,6 +168,8 @@ export const VotingPage = () => {
                             </p>
                             <input
                                 type="number"
+                                min={1}
+                                max={10}
                                 {...register("artPoints", {
                                     required: "Este campo es requerido",
                                     min: { value: 1, message: "El mínimo es 1" },
@@ -189,6 +193,8 @@ export const VotingPage = () => {
                             </p>
                             <input
                                 type="number"
+                                min={1}
+                                max={10}
                                 {...register("soundPoints", {
                                     required: "Este campo es requerido",
                                     min: { value: 1, message: "El mínimo es 1" },
@@ -212,6 +218,8 @@ export const VotingPage = () => {
                             </p>
                             <input
                                 type="number"
+                                min={1}
+                                max={10}
                                 {...register("themePoints", {
                                     required: "Este campo es requerido",
                                     min: { value: 1, message: "El mínimo es 1" },

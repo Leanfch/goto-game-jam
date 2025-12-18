@@ -63,7 +63,7 @@ export const RegisterPage = () => {
     };
 
     return (
-        <main className="min-h-screen flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <main className="my-auto flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 border border-gray-100">
                     <div className="text-center mb-8">
