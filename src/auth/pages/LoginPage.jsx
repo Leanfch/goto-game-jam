@@ -14,12 +14,9 @@ export const LoginPage = () => {
         criteriaMode: "all",
     })
 
-    // eslint-disable-next-line no-unused-vars
     const [cookies, setCookie] = useCookies(["token"])
 
     const [autenticating, setAutenticating] = useState(false)
-
-    const [error, setError] = useState(null)
 
     const navigate = useNavigate()
 
@@ -63,12 +60,12 @@ export const LoginPage = () => {
     };
 
     return (
-        <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 px-4 py-8 sm:px-6 lg:px-8">
+        <main className="flex my-auto items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 border border-gray-100">
                     <div className="text-center mb-8">
                         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                            Iniciar Sesión
+                            Iniciar sesión
                         </h1>
                         <p className="text-sm sm:text-base text-gray-600">
                             Ingresa a tu cuenta de Game Jam ON
@@ -82,12 +79,6 @@ export const LoginPage = () => {
                     )}
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                        {error && (
-                            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                                {error}
-                            </div>
-                        )}
-
                         <div>
                             <label
                                 htmlFor="email"

@@ -98,12 +98,12 @@ export const NavBar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16 md:h-20">
                     {/* Logo */}
-                    <Link to="/" className="flex-shrink-0 transition-transform hover:scale-105">
+                    <Link to="/" className="flex-shrink-0">
                         <img src="/gamejam.jpeg" alt="Game Jam ON" className="h-12 md:h-16 w-auto rounded-lg shadow-md" />
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden lg:flex items-center">
+                    <div className="hidden lg:flex gap-3 items-center">
                         <NavLink
                             to="/"
                             className={({ isActive }) =>

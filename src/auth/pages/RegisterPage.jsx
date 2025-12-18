@@ -15,7 +15,6 @@ export const RegisterPage = () => {
         criteriaMode: "all",
     })
 
-    // eslint-disable-next-line no-unused-vars
     const [cookies, setCookie] = useCookies(["token"])
 
     const [registering, setRegistering] = useState(false)
@@ -28,14 +27,15 @@ export const RegisterPage = () => {
         e.preventDefault();
         setRegistering(true);
 
-        const { name, email, password, role } = data;
+        const { name, email, password } = data;
 
+        // Por defecto todos los registros son usuarios normales
         fetch("http://localhost:3000/api/auth/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name, email, password, role }),
+            body: JSON.stringify({ name, email, password, role: "usuario" }),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -63,12 +63,12 @@ export const RegisterPage = () => {
     };
 
     return (
-        <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 px-4 py-8 sm:px-6 lg:px-8">
+        <main className="min-h-screen flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 border border-gray-100">
                     <div className="text-center mb-8">
                         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                            Crear Cuenta
+                            Crear cuenta
                         </h1>
                         <p className="text-sm sm:text-base text-gray-600">
                             Únete a la comunidad de Game Jam ON
@@ -157,6 +157,21 @@ export const RegisterPage = () => {
                             })}
                             className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:bg-white transition-all outline-none"
                         />
+
+                        {/* Requisitos de contraseña */}
+                        <div className="mt-2 space-y-1">
+                            <div className={`flex items-center text-xs ${password && password.length >= 6 ? 'text-green-600' : 'text-zinc-600'}`}>
+                                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    {password && password.length >= 6 ? (
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                    ) : (
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                    )}
+                                </svg>
+                                Mínimo 6 caracteres
+                            </div>
+                        </div>
+
                         {errors.password && (
                             <p className="text-red-600 text-sm mt-1.5">
                                 {errors.password.message}
@@ -188,33 +203,6 @@ export const RegisterPage = () => {
                             </p>
                         )}
                     </div>
-
-                    <div>
-                        <label
-                            htmlFor="role"
-                            className="block text-sm font-semibold text-gray-700 mb-2"
-                        >
-                            Tipo de Usuario
-                        </label>
-                        <select
-                            id="role"
-                            {...register("role", {
-                                required: "Este campo es requerido",
-                            })}
-                            className="block w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 focus:bg-white transition-all outline-none"
-                        >
-                            <option value="">Selecciona un rol</option>
-                            <option value="usuario">Usuario (Agregar juegos)</option>
-                            <option value="juez">Juez (Votar juegos)</option>
-                            <option value="admin">Administrador (Gestionar jueces)</option>
-                        </select>
-                        {errors.role && (
-                            <p className="text-red-600 text-sm mt-1.5">
-                                {errors.role.message}
-                            </p>
-                        )}
-                    </div>
-
                     <button
                         disabled={registering}
                         type="submit"

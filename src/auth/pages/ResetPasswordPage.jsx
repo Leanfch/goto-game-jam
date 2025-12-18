@@ -63,7 +63,7 @@ export const ResetPasswordPage = () => {
 
     if (!token) {
         return (
-            <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 px-4 py-8">
+            <main className="min-h-screen flex items-center justify-center px-4 py-8">
                 <div className="w-full max-w-md">
                     <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 text-center">
                         <div className="mb-6">
@@ -92,7 +92,7 @@ export const ResetPasswordPage = () => {
     }
 
     return (
-        <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 px-4 py-8 sm:px-6 lg:px-8">
+        <main className="min-h-screen flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 border border-gray-100">
                     <div className="text-center mb-8">

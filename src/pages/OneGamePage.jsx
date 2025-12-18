@@ -98,14 +98,14 @@ export const OneGamePage = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50">
+            <div className="min-h-screen flex items-center justify-center">
                 <span className="text-2xl text-gray-600">Cargando...</span>
             </div>
         )
     }
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-12">
+        <main className="min-h-screen py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-100">
                     {/* Header con icono */}
